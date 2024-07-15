@@ -1,0 +1,4 @@
+services:
+  gentoo:
+    build: .
+    hostname: dev-env-gentoo
