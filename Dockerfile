@@ -30,24 +30,26 @@ RUN cd /etc/portage && \
     useradd -m -G wheel nxvzbgbfben -s /bin/zsh && \
     emerge app-admin/sudo && sed -i '/# %wheel ALL=(ALL:ALL) NOPASSWD: ALL/c %wheel ALL=(ALL:ALL) NOPASSWD: ALL' /etc/sudoers && \
     emerge app-eselect/eselect-repository && \
-    emerge app-portage/gentoolkit
+    emerge app-portage/gentoolkit && \
+    emerge app-portage/flaggie
 
 RUN emerge dev-vcs/git && \
     eselect repository enable guru beatussum-overlay && \
     emerge --sync guru beatussum-overlay && \
-    echo "app-admin/chezmoi::guru ~amd64" >> /etc/portage/package.accept_keywords && emerge app-admin/chezmoi::guru && \
-    emerge app-editors/vim && \
-    echo "dev-util/rustup ~amd64" >> /etc/portage/package.accept_keywords && emerge dev-util/rustup && \
-    echo "dev-util/shellspec::beatussum-overlay ~amd64" >> /etc/portage/package.accept_keywords && emerge dev-util/shellspec::beatussum-overlay && \
+    flaggie app-admin/chezmoi::guru +kw::~amd64 && emerge app-admin/chezmoi::guru && \
+    flaggie app-editors/vim +use::python && emerge app-editors/vim && \
+    flaggie dev-util/rustup +kw::~amd64 && emerge dev-util/rustup && \
+    flaggie dev-util/shellspec::beatussum-overlay +kw::~amd64 && emerge dev-util/shellspec::beatussum-overlay && \
     emerge --depclean && eclean --deep distfiles
 
 WORKDIR /home/nxvzbgbfben
 USER nxvzbgbfben
 SHELL ["/bin/zsh", "-c"]
 
-RUN chezmoi init --apply NXVZBGBFBEN
-
-RUN rustup-init-gentoo --symlink
+RUN chezmoi init --apply NXVZBGBFBEN && \
+    source .zshenv && \
+    rustup-init-gentoo --symlink && \
+    { curl -fsSL https://get.pnpm.io/install.sh | sh - } && pnpm env use --global lts
 
 USER root
 CMD ["/sbin/init"]
