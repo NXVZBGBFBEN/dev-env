@@ -42,14 +42,20 @@ RUN emerge dev-vcs/git && \
     flaggie dev-util/shellspec::beatussum-overlay +kw::~amd64 && emerge dev-util/shellspec::beatussum-overlay && \
     emerge --depclean && eclean --deep distfiles
 
+RUN rc-update add sshd default
+
 WORKDIR /home/nxvzbgbfben
 USER nxvzbgbfben
-SHELL ["/bin/zsh", "-c"]
+SHELL ["/bin/zsh", "-l", "-c"]
 
 RUN chezmoi init --apply NXVZBGBFBEN && \
-    source .zshenv && \
+    exec /bin/zsh -l && \
     rustup-init-gentoo --symlink && \
     { curl -fsSL https://get.pnpm.io/install.sh | sh - } && pnpm env use --global lts
 
+RUN --mount=type=secret,id=ssh_docker,uid=1000,required \
+    mkdir -m 700 -p /home/nxvzbgbfben/.ssh && cat /run/secrets/ssh_docker >> /home/nxvzbgbfben/.ssh/authorized_keys
+
 USER root
+EXPOSE 22
 CMD ["/sbin/init"]

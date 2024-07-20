@@ -1,0 +1,7 @@
+/secrets/**
+!/secrets/.gitkeep
+
+/mount/**
+!/mount/.gitkeep
+
+*.swp
