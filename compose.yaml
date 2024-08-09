@@ -12,4 +12,4 @@ services:
 
 secrets:
   ssh_docker:
-    file: ./secrets/dev-env.pub
+    file: ~/.ssh/dev-env.pub
