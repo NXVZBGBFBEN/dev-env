@@ -1,0 +1,30 @@
+on:
+  schedule:
+    - cron: "30 11 * * *"
+
+jobs:
+  build_docker_container:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Login to ghcr.io
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Generate tag name
+        id: tag_name
+        run: |
+          export TAG_NAME=$(date "%Y%m%d")
+          echo "tag_name=${TAG_NAME}" >> $GITHUB_OUTPUT
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}/dev-env:${{ steps.tag_name.outputs.tag_name }}
