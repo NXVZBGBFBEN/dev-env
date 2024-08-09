@@ -20,7 +20,7 @@ jobs:
       - name: Generate tag name
         id: tag_name
         run: |
-          export TAG_NAME=$(date "%Y%m%d")
+          export TAG_NAME=$"$(date "%Y%m%d")"
           echo "tag_name=${TAG_NAME}" >> $GITHUB_OUTPUT
 
       - name: Build and push
