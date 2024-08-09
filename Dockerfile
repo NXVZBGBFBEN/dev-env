@@ -46,12 +46,13 @@ RUN rc-update add sshd default
 
 WORKDIR /home/nxvzbgbfben
 USER nxvzbgbfben
-SHELL ["/bin/zsh", "-l", "-c"]
+SHELL ["/bin/zsh", "-c"]
 
 RUN chezmoi init --apply NXVZBGBFBEN && \
-    exec /bin/zsh -l && \
+    source .zshenv && \
     rustup-init-gentoo --symlink && \
-    { curl -fsSL https://get.pnpm.io/install.sh | sh - } && pnpm env use --global lts
+    { curl -fsSL https://get.pnpm.io/install.sh | sh - } && pnpm env use --global lts && \
+    curl https://wasmtime.dev/install.sh -sSf | bash && rm .zshrc
 
 RUN --mount=type=secret,id=ssh_docker,uid=1000,required \
     mkdir -m 700 -p /home/nxvzbgbfben/.ssh && cat /run/secrets/ssh_docker >> /home/nxvzbgbfben/.ssh/authorized_keys
