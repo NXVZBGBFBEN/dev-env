@@ -27,5 +27,4 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          tags: |
-            ghcr.io/${{ github.repository }}/dev-env:${{ steps.tag_name.outputs.tag_name }}
+          tags: ghcr.io/${{ github.repository }}:${{ steps.tag_name.outputs.tag_name }}
