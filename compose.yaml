@@ -2,14 +2,8 @@ services:
   gentoo:
     build:
       context: .
-      secrets:
-        - ssh_docker
     hostname: dev-env-gentoo
     volumes:
       - ./mount:/mnt/host
     ports:
       - "2222:22"
-
-secrets:
-  ssh_docker:
-    file: ~/.ssh/dev-env.pub

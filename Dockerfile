@@ -54,9 +54,6 @@ RUN chezmoi init --apply NXVZBGBFBEN && \
     { curl -fsSL https://get.pnpm.io/install.sh | sh - } && pnpm env use --global lts && \
     curl https://wasmtime.dev/install.sh -sSf | bash && rm .zshrc
 
-RUN --mount=type=secret,id=ssh_docker,uid=1000,required \
-    mkdir -m 700 -p /home/nxvzbgbfben/.ssh && cat /run/secrets/ssh_docker >> /home/nxvzbgbfben/.ssh/authorized_keys
-
 USER root
 EXPOSE 22
 CMD ["/sbin/init"]
