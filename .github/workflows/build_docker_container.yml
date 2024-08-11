@@ -28,7 +28,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
-          context: ./images
+          context: ./base_images
           push: true
           tags: |
             ghcr.io/nxvzbgbfben/dev-env/main:latest

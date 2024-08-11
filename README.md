@@ -1,8 +1,8 @@
 # dev-env
 
-## Setup secrets
+## Login to ghcr.io
 ```
-> chmod 600 ./secrets
+> docker login ghcr.io
 ```
 
 ### Setup SSH
