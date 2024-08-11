@@ -1,7 +1,9 @@
+name: Build docker container
+
 on:
-  workflow_dispatch:
   schedule:
     - cron: "30 02 * * *"  # 1130 (JST)
+  workflow_dispatch:
 
 jobs:
   build_docker_container:
@@ -26,7 +28,8 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
+          context: ./images
           push: true
           tags: |
-            ghcr.io/nxvzbgbfben/dev-env/dev-env:latest
-            ghcr.io/nxvzbgbfben/dev-env/dev-env:${{ steps.tag_name.outputs.tag_name }}
+            ghcr.io/nxvzbgbfben/dev-env/main:latest
+            ghcr.io/nxvzbgbfben/dev-env/main:${{ steps.tag_name.outputs.tag_name }}
